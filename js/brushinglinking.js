@@ -14,28 +14,25 @@ const svg1 = d3.select("#vis-holder")
 let brush1; 
 let myCircles1; 
 
-//TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2)
+//append svg object to the body of the page to house Scatterplot2 (call it svg2)
 const svg2 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom)
                 .attr("viewBox", [0, 0, width, height]); 
 
-//TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
+//Initialize brush for Scatterplot2 and points. We will need these to be global.
 let brush2;
 let myCircles2; 
 
-//TODO: append svg object to the body of the page to house bar chart 
+//append svg object to the body of the page to house bar chart 
 const svg3 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom)
                 .attr("viewBox", [0, 0, width, height]); 
 
-//TODO: Initialize bars. We will need these to be global. 
-let setosa; 
-let versicolor; 
-let virginica;
+//Initialize bars. We will need these to be global. 
 let myBars;  
 
 // Define color scale
@@ -119,7 +116,7 @@ d3.csv("data/iris.csv").then((data) => {
                   .extent( [ [0,0], [400,400] ] )*/
   }
 
-  //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
+  //Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
   {
     let xKey2 = "Sepal_Width";
     let yKey2 = "Petal_Width";
@@ -177,15 +174,16 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("opacity", 0.5);
   }
 
-  //TODO: Barchart with counts of different species
+  // Barchart with counts of different species
   {
-
+//define data
       const data1 = [
       {species: 'setosa', count: 50, color:"#FF7F50"},
       {species: 'virginica', count: 50,color: "#21908dff"},
       {species: 'versicolor', count: 50, color:"#fde725ff" }
     ];
     
+    // set-up graph
     x3 = d3.scaleBand()
           .range([margin.left, width - margin.right])
                     .padding(0.1); 
@@ -195,7 +193,9 @@ d3.csv("data/iris.csv").then((data) => {
   x3.domain(data1.map(function(d) { return d.species; }));
   y3.domain([0, d3.max(data1, function(d) { return d.count; })]);
   
-  const myBars3 = svg3.selectAll(".bar")
+    
+  // create bars and add to grahp
+  const myBars = svg3.selectAll(".bar")
                             .data(data1)
                             .enter().append("rect")
                             .attr("class", "bar")
