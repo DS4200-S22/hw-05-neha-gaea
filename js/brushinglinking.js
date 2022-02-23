@@ -108,12 +108,17 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    /*TODO: Define a brush (call it brush1)
+   
+       //Define a brush (call it brush1)
 
-    //TODO: Add brush1 to svg1
-    brush1 = d3.select("#vis-holder")
-                .call( d3.brush())
-                  .extent( [ [0,0], [400,400] ] )*/
+        brush1 = d3.brush();
+
+        //Add brush1 to svg1
+
+        svg1.call(brush1
+            .extent([[0, 0], [width, height]])
+            .on("start brush", updateChart1(brush1)));
+
   }
 
   //Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
