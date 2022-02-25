@@ -2,3 +2,10 @@
 body {
   font-family: Arial;
 }
+
+
+.selected {
+  opacity: 1;
+  stroke: black;
+  stroke-width: 4px;
+}
