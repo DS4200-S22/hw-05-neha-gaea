@@ -117,7 +117,7 @@ d3.csv("data/iris.csv").then((data) => {
         //Add brush1 to svg1
 
         svg1.call(brush1
-            .on("start brush", updateChart1));
+            .on("start brush", updateChart2));
 
   }
 
@@ -184,9 +184,9 @@ d3.csv("data/iris.csv").then((data) => {
 
          brush2 = d3.brush().extent([[0, 0], [width, height]]);
 
-        //TODO: Add brush1 to svg1
+        //TODO: Add brush2 to svg2
 
-        svg2.call(brush2
+         svg2.call(brush2
             .on("start brush", updateChart2));
   }
 
@@ -210,7 +210,7 @@ d3.csv("data/iris.csv").then((data) => {
   y3.domain([0, d3.max(data1, function(d) { return d.count; })]);
   
     
-  // create bars and add to grahp
+  // create bars and add to graph
   myBars = svg3.selectAll(".bar")
                             .data(data1)
                             .enter().append("rect")
@@ -220,51 +220,47 @@ d3.csv("data/iris.csv").then((data) => {
                               .attr("y", (d) => y3(d.count))
                               .style("fill", (d) => color(d.species))
                               .attr("height", height - margin.top - margin.bottom);
+    //Create y axis
       svg3.append("g")
       .attr("transform", `translate(${margin.left}, 0)`) 
       .call(d3.axisLeft(y3)) 
       .attr("font-size", '20px'); 
   
- 
+  //Create x axis
     svg3.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`) 
         .call(d3.axisBottom(x3)) 
         .attr("font-size", '20px'); 
+       
   }  
                    
   //Brushing Code---------------------------------------------------------------------------------------------
+  //Referenced https://www.d3-graph-gallery.com/graph/interactivity_brush.html for brushing
     
-   // Call to removes existing brushes
+    // Call to removes existing brushes
     function clear() {
         svg1.call(brush1.move, null);
-
-        //TODO: add code to clear existing brush from svg2
+        // //TODO: add code to clear existing brush from svg2
         svg2.call(brush2.move, null);
     }
 
     // Call when Scatterplot1 is brushed
     function updateChart1(brushEvent) {
-        // console.log("Updating chart 1");
 
         //TODO: Find coordinates of brushed region
 
-        let coordinates = d3.brushSelection(this);
-        // console.log(coordinates);
+        let brushedRegion = d3.brushSelection(this);
 
         //TODO: Give bold outline to all points within the brush region in Scatterplot1
 
         myCircles1.classed("selected", function (d) { 
-            return isBrushed(coordinates, x1(d.Sepal_Length), y1(d.Petal_Length))
+            return isBrushed(brushedRegion, x1(d.Sepal_Length), y1(d.Petal_Length))
          })
 
         //TODO: Give bold outline to all points in Scatterplot2 corresponding to points within the brush region in Scatterplot1
 
         myCircles2.classed("selected", function (d) { 
-            return isBrushed(coordinates, x1(d.Sepal_Length), y1(d.Petal_Length))
-         })
-
-        myBars.classed("selected", function (d) { 
-            return isBrushed(coordinates, x1(d.Sepal_Width), y2(d.Petal_Width))
+            return isBrushed(brushedRegion, x1(d.Sepal_Length), y1(d.Petal_Length))
          })
     }
 
@@ -272,24 +268,30 @@ d3.csv("data/iris.csv").then((data) => {
     function updateChart2(brushEvent) {
 
         //TODO: Find coordinates of brushed region
-        let coordinates = d3.brushSelection(this);
+        let brushedRegion = d3.brushSelection(this);
 
         //TODO: Start an empty set that you can store names of selected species in
-        let selectedSpecies = new Set();
+        let speciesName = new Set();
 
-
-        //TODO: Give bold outline to all points within the brush region in Scatterplot2 & collected names of brushed species
+       //TODO: Give bold outline to all points within the brush region in Scatterplot2 & collected names of brushed species
         myCircles2.classed("selected", function (d) { 
-            return isBrushed(coordinates, x2(d.Sepal_Width), y2(d.Petal_Width))
+             collected = isBrushed(brushedRegion, x2(d.Sepal_Width), y2(d.Petal_Width));
+            if (collected) {
+                speciesName.add(d.Species);
+            }
+            return collected;
          })
 
         //TODO: Give bold outline to all points in Scatterplot1 corresponding to points within the brush region in Scatterplot2
         myCircles1.classed("selected", function (d) { 
-            return isBrushed(coordinates, x2(d.Sepal_Width), y2(d.Petal_Width))
+            return isBrushed(brushedRegion, x2(d.Sepal_Width), y2(d.Petal_Width));
          })
 
-        
-  }
+        //TODO: Give bold outline to all bars in bar chart with corresponding to species selected by Scatterplot2 brush
+        myBars.classed("selected", function (d) { 
+            return speciesName.has(d.species);
+         })
+    }
 
     //Finds dots within the brushed region
     function isBrushed(brush_coords, cx, cy) {
