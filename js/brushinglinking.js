@@ -117,7 +117,7 @@ d3.csv("data/iris.csv").then((data) => {
         //Add brush1 to svg1
 
         svg1.call(brush1
-            .on("start brush", updateChart2));
+            .on("start brush", updateChart1));
 
   }
 
