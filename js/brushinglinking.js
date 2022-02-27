@@ -117,7 +117,8 @@ d3.csv("data/iris.csv").then((data) => {
         //Add brush1 to svg1
 
         svg1.call(brush1
-            .on("start brush", updateChart1));
+             .on("start", clear)
+            .on("brush", updateChart1));
 
   }
 
@@ -187,7 +188,8 @@ d3.csv("data/iris.csv").then((data) => {
         //TODO: Add brush2 to svg2
 
          svg2.call(brush2
-            .on("start brush", updateChart2));
+              .on("start", clear)
+            .on("brush", updateChart2));
   }
 
   // Barchart with counts of different species
