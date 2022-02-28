@@ -1,9 +1,9 @@
-//makes all font arial
+/* makes all font arial */
 body {
   font-family: Arial;
 }
 
-// outlines for data points when brushed
+/*outlines for data points when brushed */
 .selected {
   opacity: 1 !important;
   stroke: black;
